@@ -3,10 +3,14 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 
+// Configure dotenv to load environment variables from .env file
+dotenv.config();
 
 const app = express();
 
+// Import routes
 import { UserRouter } from "./Routes/userRoute.js";
 
 app.use(express.json());
@@ -16,11 +20,11 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-app.use('/auth',UserRouter);
+// Use the user route
+app.use('/auth', UserRouter);
 
-
-
-mongoose.connect('mongodb+srv://admin2621:Admin2621@cluster0.zwh3s.mongodb.net/')
+// Connect to MongoDB
+mongoose.connect(process.env.MongoDb_URL)
   .then(() => {
     console.log("MongoDB connected");
   })
@@ -28,6 +32,6 @@ mongoose.connect('mongodb+srv://admin2621:Admin2621@cluster0.zwh3s.mongodb.net/'
     console.log("MongoDB connection error:", e);
   });
 
-
+// Start the server
 const PORT = 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
